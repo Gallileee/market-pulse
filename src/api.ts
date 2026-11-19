@@ -55,12 +55,31 @@ export class ApiError extends Error {
 const BASE = 'https://api.coingecko.com/api/v3';
 const cache = new Map<string, { at: number; data: unknown }>();
 
+function wait(ms: number, signal?: AbortSignal) {
+  return new Promise<void>((resolve, reject) => {
+    const id = setTimeout(resolve, ms);
+    signal?.addEventListener('abort', () => {
+      clearTimeout(id);
+      reject(signal.reason);
+    });
+  });
+}
+
 async function get<T>(path: string, ttlMs: number, signal?: AbortSignal): Promise<T> {
   const hit = cache.get(path);
   if (hit && Date.now() - hit.at < ttlMs) return hit.data as T;
 
-  const res = await fetch(BASE + path, { signal });
+  // The free tier answers 429 when it's busy; back off and try again a couple
+  // of times before bothering the user with an error.
+  let res = await fetch(BASE + path, { signal });
+  for (let attempt = 1; res.status === 429 && attempt <= 3; attempt++) {
+    await wait(attempt * 4000, signal);
+    res = await fetch(BASE + path, { signal });
+  }
+
   if (!res.ok) {
+    // Older data beats an empty screen: fall back to the last good response.
+    if (hit) return hit.data as T;
     throw new ApiError(
       res.status === 429
         ? 'The free API is rate limited (about 30 requests a minute). Give it a moment and retry.'

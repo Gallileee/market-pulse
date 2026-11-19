@@ -5,6 +5,8 @@ A live crypto market dashboard: the top 50 coins with prices, 1h / 24h / 7d move
 Built with React, TypeScript and Vite on top of the free CoinGecko API, so it runs with no keys
 and no backend.
 
+**Live demo: https://gallileee.github.io/market-pulse/**
+
 ## What's in it
 
 - **Market overview tiles**: total market cap with its 24 h change, 24 h volume, BTC / ETH
@@ -53,4 +55,8 @@ Some details worth pointing out:
 
 Market data comes from the public [CoinGecko API](https://www.coingecko.com/en/api). The free tier
 allows roughly 30 requests a minute, which the cache and the one-minute refresh stay well within.
+If the API does answer "too many requests", the client backs off and retries, and keeps showing
+the last good data instead of an empty screen.
+
+Every push to `main` is built and published to GitHub Pages by `.github/workflows/deploy.yml`.
 This is a demo project, not financial advice.
