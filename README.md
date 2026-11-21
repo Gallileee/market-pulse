@@ -1,11 +1,15 @@
 # Market Pulse
 
+[![status](https://img.shields.io/endpoint?url=https%3A%2F%2Fgallileee.github.io%2Fpulsewatch%2Fbadge%2Fmarket-pulse.json)](https://gallileee.github.io/pulsewatch/)
+
 A live crypto market dashboard: the top 50 coins with prices, 1h / 24h / 7d moves and
 7-day sparklines, a detailed price chart with volume, market-wide stats and a personal watchlist.
 Built with React, TypeScript and Vite on top of the free CoinGecko API, so it runs with no keys
 and no backend.
 
-**Live demo: https://gallileee.github.io/market-pulse/**
+**Live demo: https://gallileee.github.io/market-pulse/**. Its uptime is watched every 5 minutes by
+[Pulsewatch](https://github.com/Gallileee/pulsewatch), on the
+[status page](https://gallileee.github.io/pulsewatch/); the badge above follows it.
 
 ## What's in it
 
